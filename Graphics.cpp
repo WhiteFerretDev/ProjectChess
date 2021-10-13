@@ -7,7 +7,7 @@ ChessWindow::ChessWindow(){
     int success = Init();
 
     if(!success){
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "failed to initialize Chess Window");
+        LogSDLError("failed to initialize chess window");
     }
 
     ClearScreen();
@@ -18,38 +18,34 @@ int ChessWindow::Init(){
 
     // Initialize SDL with video system
     if(SDL_Init(SDL_INIT_VIDEO) == -1){
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "failed to init video system: %s\n", SDL_GetError());
+        LogSDLError("failed to init video system");
         return -1;  
     }
     
     window = SDL_CreateWindow("ProjectChess", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 640, SDL_WINDOW_RESIZABLE);
 
     if(!window){
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "window creation fail: %s\n", SDL_GetError());
+        LogSDLError("window creation fail");
         return -1;
     }
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if(!renderer){
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "renderer creation fail: %s\n", SDL_GetError());
+        LogSDLError("render creation fail");
     }
 
     surface = SDL_GetWindowSurface(window);
 
     if(!surface){
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "error getting window surface: %s\n", SDL_GetError());
+        LogSDLError("error getting window surface");
     }
 
     return 1;
 }
 
 void ChessWindow::ClearScreen(){
-    SetRendererColor(renderer, clearScreenColor);
+    SetSDLRenderColor(renderer, clearScreenColor);
     SDL_RenderClear(renderer);
-}
-
-void ChessWindow::SetRendererColor(SDL_Renderer* renderer, SDL_Color color){
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
 void ChessWindow::DrawBoard(){
@@ -64,7 +60,7 @@ void ChessWindow::DrawBoard(){
 
     // Drawing white part
     
-    SetRendererColor(renderer, whiteColor);
+    SetSDLRenderColor(renderer, whiteColor);
 
     for(int row = 0; row < 8; row++){
         // offsetting every second line starting with the first to get chess board pattern

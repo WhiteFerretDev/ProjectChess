@@ -1,5 +1,10 @@
 #include <SDL2/SDL.h>
 
+
+#define LogSDLError(message) SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, message  ": %s\n", SDL_GetError());
+#define SetSDLRenderColor(renderer, color) SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+
+
 class ChessWindow{
 
     private:
@@ -17,7 +22,6 @@ class ChessWindow{
     int Init();
 
     void ClearScreen();
-    void SetRendererColor(SDL_Renderer* renderer, SDL_Color color);
 
     void DrawBoard();
 
