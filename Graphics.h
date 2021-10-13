@@ -2,6 +2,7 @@
 
 
 #define LogSDLError(message) SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, message  ": %s\n", SDL_GetError());
+#define LogSDLInfo(message) SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, message);
 #define SetSDLRenderColor(renderer, color) SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
 
@@ -23,6 +24,7 @@ class ChessWindow{
 
     void ClearScreen();
 
+    void Draw();
     void DrawBoard();
 
     public:

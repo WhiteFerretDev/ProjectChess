@@ -11,7 +11,7 @@ ChessWindow::ChessWindow(){
     }
 
     ClearScreen();
-    DrawBoard();
+    Draw();
 }
 
 int ChessWindow::Init(){
@@ -33,6 +33,7 @@ int ChessWindow::Init(){
     if(!renderer){
         LogSDLError("render creation fail");
     }
+    SDL_RenderSetLogicalSize(renderer, 640, 640);
 
     surface = SDL_GetWindowSurface(window);
 
@@ -47,6 +48,13 @@ void ChessWindow::ClearScreen(){
     SetSDLRenderColor(renderer, clearScreenColor);
     SDL_RenderClear(renderer);
 }
+
+
+void ChessWindow::Draw(){
+    ClearScreen();
+    DrawBoard();
+}
+
 
 void ChessWindow::DrawBoard(){
     SDL_Rect viewport;
@@ -84,8 +92,16 @@ void ChessWindow::Update(){
     while(SDL_PollEvent(&event)){
         switch(event.type){
             case SDL_QUIT:
-            Close();
-            break;
+                Close();
+                break;
+            
+            case SDL_WINDOWEVENT:
+                switch (event.window.event){
+                    case SDL_WINDOWEVENT_SIZE_CHANGED:
+                        Draw();
+                        break;
+                }
+                break;
         }
     }
 }
