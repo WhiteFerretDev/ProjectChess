@@ -27,6 +27,9 @@ class ChessWindow{
     void Draw();
     void DrawBoard();
 
+    void DrawBoardBackground(int* boardSize);
+    void DrawBoardSquares(int* boardSize);
+
     public:
     ChessWindow();
 
