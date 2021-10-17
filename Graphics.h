@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include "Board.h"
 
 
 #define LogSDLError(message) SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, message  ": %s\n", SDL_GetError());
@@ -24,17 +25,18 @@ class ChessWindow{
 
     void ClearScreen();
 
-    void Draw();
+    void Draw(Board* boardObject);
     void DrawBoard();
-
     void DrawBoardBackground(int* boardSize);
     void DrawBoardSquares(int* boardSize);
+    void DrawBoardPieces(Board* boardObject);
+    void DrawPiece(unsigned char* piece, int* pos);
 
     public:
     ChessWindow();
 
-    void Start();
-    void Update();
+    void Start(Board* boardObject);
+    void Update(Board* boardObject);
     void Close();
 
     int GetStatus();

@@ -1,5 +1,8 @@
 #include "Graphics.h"
+#include "Pieces.h"
 #include <iostream>
+// TODO: remove
+#include <bitset>
 
 
 ChessWindow::ChessWindow(){
@@ -11,7 +14,6 @@ ChessWindow::ChessWindow(){
     }
 
     ClearScreen();
-    Draw();
 }
 
 int ChessWindow::Init(){
@@ -44,15 +46,49 @@ int ChessWindow::Init(){
     return 1;
 }
 
+void ChessWindow::Start(Board* boardObject){
+    Draw(boardObject);
+}
+
+void ChessWindow::Update(Board* boardObject){
+    SDL_Event event;
+
+    while(SDL_PollEvent(&event)){
+        switch(event.type){
+            case SDL_QUIT:
+                Close();
+                break;
+            
+            case SDL_WINDOWEVENT:
+                switch (event.window.event){
+                    case SDL_WINDOWEVENT_SIZE_CHANGED:
+                        Draw(boardObject);
+                        break;
+                }
+                break;
+        }
+    }
+}
+
+void ChessWindow::Close(){
+    status = 0;
+    SDL_FreeSurface(surface);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+}
+
+
 void ChessWindow::ClearScreen(){
     SetSDLRenderColor(renderer, clearScreenColor);
     SDL_RenderClear(renderer);
 }
 
 
-void ChessWindow::Draw(){
+void ChessWindow::Draw(Board* boardObject){
+
     ClearScreen();
     DrawBoard();
+    DrawBoardPieces(boardObject);
 
     SDL_RenderPresent(renderer);
 }
@@ -102,31 +138,17 @@ void ChessWindow::DrawBoardSquares(int * boardSize){
     }
 }
 
-void ChessWindow::Update(){
-    SDL_Event event;
-
-    while(SDL_PollEvent(&event)){
-        switch(event.type){
-            case SDL_QUIT:
-                Close();
-                break;
-            
-            case SDL_WINDOWEVENT:
-                switch (event.window.event){
-                    case SDL_WINDOWEVENT_SIZE_CHANGED:
-                        Draw();
-                        break;
-                }
-                break;
+void ChessWindow::DrawBoardPieces(Board* boardObject){
+    for(int i = 0; i < 64; i++){
+        // check if field is not empty
+        if((boardObject->fields[i] & Piece::EMPTY) != Piece::EMPTY){
+            DrawPiece(&boardObject->fields[i], &i);
         }
     }
 }
 
-void ChessWindow::Close(){
-    status = 0;
-    SDL_FreeSurface(surface);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+void ChessWindow::DrawPiece(unsigned char* piece, int* pos){
+    std::cout << std::bitset<8>(*piece) << std::endl;
 }
 
 int ChessWindow::GetStatus(){
